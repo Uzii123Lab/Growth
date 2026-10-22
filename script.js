@@ -142,16 +142,20 @@ document.querySelector("#lightbox").addEventListener("click", (event) => {
 const configNumber = String(window.GROWTH_CONFIG?.whatsappNumber ?? "").replace(/\D/g, "");
 const whatsappReady = /^\d{8,15}$/.test(configNumber) && !/^0+$/.test(configNumber);
 const genericMessage = "Hello GROWTH, I am interested in renting furniture for an upcoming event. Please assist me with a quotation.";
-const whatsappLink = document.querySelector("#whatsapp-link");
+const whatsappLinks = [document.querySelector("#whatsapp-link"), document.querySelector("#whatsapp-footer-link")].filter(Boolean);
 if (whatsappReady) {
-  whatsappLink.href = `https://wa.me/${configNumber}?text=${encodeURIComponent(genericMessage)}`;
-  whatsappLink.target = "_blank";
-  whatsappLink.rel = "noopener noreferrer";
+  whatsappLinks.forEach((link) => {
+    link.href = `https://wa.me/${configNumber}?text=${encodeURIComponent(genericMessage)}`;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  });
 } else {
-  whatsappLink.addEventListener("click", (event) => {
-    event.preventDefault();
-    setFormMessage("WhatsApp is not configured yet. Add your business number in business-config.js to enable contact.", true);
-    document.querySelector("#enquiry").scrollIntoView({ behavior: "smooth" });
+  whatsappLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      setFormMessage("WhatsApp is not configured yet. Add your business number in business-config.js to enable contact.", true);
+      document.querySelector("#enquiry").scrollIntoView({ behavior: "smooth" });
+    });
   });
 }
 
